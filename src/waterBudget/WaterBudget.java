@@ -53,8 +53,8 @@ import org.apache.commons.math3.ode.*;
 public class WaterBudget extends JGTModel{
 
 
-	@Description("rainafall: rainfall value for the given time considered") 
-	double rainafall;
+	@Description("precipitation: precipitation value for the given time considered") 
+	double precipitation;
 
 	@Description("Input Precipitation Hashmap")
 	@In
@@ -193,8 +193,8 @@ public class WaterBudget extends JGTModel{
 			Integer ID = entry.getKey();
 
 			/**Input data reading*/
-			rainafall = inPrecipvalues.get(ID)[0];
-			if (isNovalue(rainafall)) rainafall= 0;
+			precipitation = inPrecipvalues.get(ID)[0];
+			if (isNovalue(precipitation)) precipitation= 0;
 
 			double Qinput =inDischargevalues.get(ID)[0];
 			if (isNovalue(Qinput)) Qinput= 0;
@@ -243,7 +243,7 @@ public class WaterBudget extends JGTModel{
 
 		/** SimpleFactory for the creation of the differential equation*/
 		FirstOrderDifferentialEquations ode;			
-		ode=SimpleWaterBudgetOdeFactory.createOde("WB",Qmod,nZ,ETmod,rainafall);
+		ode=SimpleWaterBudgetOdeFactory.createOde("WB",Qmod,nZ,ETmod,precipitation);
 
 		/** Boundaries conditions*/
 		double[] y = new double[] { S_i, 0 };
