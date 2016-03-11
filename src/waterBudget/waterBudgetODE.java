@@ -33,7 +33,7 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
  * soil moisture value at the previous time step (S)
  * @author Marialaura Bancheri
  */
-public class Layer implements FirstOrderDifferentialEquations{
+public class waterBudgetODE implements FirstOrderDifferentialEquations{
 
 	public static double Qmod;
 
@@ -56,7 +56,7 @@ public class Layer implements FirstOrderDifferentialEquations{
 	 * @param S: the soil moisture value at the previous time step
 	 * @param s_max: the maximum value of the soil moisture 
 	 */
-	public Layer(double nZ, double J, double Qmod, double ETmod) {
+	public waterBudgetODE(double nZ, double J, double Qmod, double ETmod) {
 		this.Qmod=Qmod;
 		this.nZ=nZ;
 		this.J=J;

@@ -78,8 +78,8 @@ public class TestWaterBudget extends HMTestCase{
 			waterBudget.Q_model="NonLinearReservoir";
 			waterBudget.ET_model="AET";
 			waterBudget.A=115.4708483;
-			waterBudget.a=0.5;
-			waterBudget.b=1;
+			waterBudget.a=752.3543670;
+			waterBudget.b=1.75744;
 			waterBudget.s_max=0.005704;
 			waterBudget.Re=0.2;
 			waterBudget.nZ=1;

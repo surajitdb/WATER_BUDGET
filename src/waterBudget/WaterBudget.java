@@ -242,9 +242,8 @@ public class WaterBudget extends JGTModel{
 		ETmodel=SimpleETModelFactory.createModel(ET_model,ET,S_i,s_max);
 		double ETmod=ETmodel.ETValues();
 
-		/** SimpleFactory for the creation of the differential equation*/
-		FirstOrderDifferentialEquations ode;			
-		ode=SimpleWaterBudgetOdeFactory.createOde("WB",Qmod,nZ,ETmod,precipitation);
+		/** Creation of the differential equation*/
+		FirstOrderDifferentialEquations ode=new waterBudgetODE(nZ,precipitation, Qmod, ETmod);			
 
 		/** Boundaries conditions*/
 		double[] y = new double[] { S_i, 0 };
