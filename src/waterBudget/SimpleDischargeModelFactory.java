@@ -9,8 +9,6 @@ public class SimpleDischargeModelFactory {
 			model=new NonLinearReservoir(a,S_i,b);
 		}else if (type.equals("ExternalValues")){
 			model=new ExternalDischargeValues(Qinput,A);
-		}else if (type.equals("nullQ")){
-			model=new Qnull();
 		}
 			
 		return model;

@@ -8,8 +8,6 @@ public class SimpleETModelFactory {
 			model=new AETmodel(ET,S_i,s_max);
 		}else if (type.equals("ExternalValues")){
 			model=new ExternalETValues(ET);
-		}else if (type.equals("nullET")){
-			model=new AETnull();
 		}
 			
 		return model;

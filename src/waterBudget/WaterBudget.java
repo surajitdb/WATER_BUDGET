@@ -115,11 +115,11 @@ public class WaterBudget extends JGTModel{
 	public static double Re;
 
 
-	@Description("ODE mode: NonLinearReservoir, ExternalValues, nullQ")
+	@Description("Discharge model: NonLinearReservoir, ExternalValues")
 	@In
 	public String Q_model;
 
-	@Description("ODE mode: AET,ExternalValues, nullET")
+	@Description("ET model: AET,ExternalValues")
 	@In
 	public String ET_model;
 
@@ -183,7 +183,7 @@ public class WaterBudget extends JGTModel{
 	 */
 	@Execute
 	public void process() throws Exception {
-		checkNull(inPrecipvalues,inDischargevalues,inETvalues);
+		checkNull(inPrecipvalues);
 
 		// reading the ID of all the stations 
 		Set<Entry<Integer, double[]>> entrySet = inPrecipvalues.entrySet();
@@ -196,12 +196,13 @@ public class WaterBudget extends JGTModel{
 			precipitation = inPrecipvalues.get(ID)[0];
 			if (isNovalue(precipitation)) precipitation= 0;
 
-			double Qinput =inDischargevalues.get(ID)[0];
-			if (isNovalue(Qinput)) Qinput= 0;
+			double Qinput=0;
+			if (inDischargevalues != null) Qinput =inDischargevalues.get(ID)[0];
 
-			if (s_max==0) ET=0;
-			else { ET = inETvalues.get(ID)[0];
-			if (isNovalue(ET)) ET= 0;}
+
+			ET=0;
+			if (inETvalues != null) ET = inETvalues.get(ID)[0];
+
 
 
 			double waterStorage=computeS(Qinput);

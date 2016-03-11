@@ -9,7 +9,7 @@ import org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter;
 import org.jgrasstools.gears.libs.monitor.PrintStreamProgressMonitor;
 import org.jgrasstools.hortonmachine.utils.HMTestCase;
 
-import waterBudget.*;
+import waterBudget.WaterBudget;
 
 public class TestWaterBudget extends HMTestCase{
 
@@ -76,7 +76,7 @@ public class TestWaterBudget extends HMTestCase{
 		
 			waterBudget.solver_model="dp853";
 			waterBudget.Q_model="NonLinearReservoir";
-			waterBudget.ET_model="nullET";
+			waterBudget.ET_model="AET";
 			waterBudget.A=115.4708483;
 			waterBudget.a=0.5;
 			waterBudget.b=1;
@@ -142,10 +142,6 @@ public class TestWaterBudget extends HMTestCase{
 				writerR.close();
 			}
             
-			
-            //double value = outHM.get(8)[0];
-            //assertTrue(NumericsUtilities.dEq(value, 3.7612114870933824));
-            //break;
 		}
 		JReader.close();
         dischargeReader.close();
