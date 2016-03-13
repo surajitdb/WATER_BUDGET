@@ -174,7 +174,6 @@ public class WaterBudget extends JGTModel{
 	@Out
 	public HashMap<Integer, double[]> outHMR= new HashMap<Integer, double[]>() ;
 
-
 	/**
 	 * Process: reading of the data, computation of the
 	 * storage and outflows
@@ -215,9 +214,6 @@ public class WaterBudget extends JGTModel{
 			storeResult_series(ID,waterStorage,discharge,evapotranspiration,quickRunoff,drainage);
 
 		}
-
-
-
 
 	}
 
@@ -281,7 +277,6 @@ public class WaterBudget extends JGTModel{
 		return Q;
 	}
 
-
 	/**
 	 * Compute the outflow toward the lower layer
 	 *
@@ -319,7 +314,6 @@ public class WaterBudget extends JGTModel{
 		return AET;
 	}	
 
-
 	/**
 	 * Store of the results in hashmaps 
 	 *
@@ -339,6 +333,6 @@ public class WaterBudget extends JGTModel{
 		outHMQuick.put(ID, new double[]{quickRunoff});
 		outHMR.put(ID, new double[]{drainage});
 
-
 	}
+
 }
