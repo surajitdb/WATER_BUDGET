@@ -204,14 +204,14 @@ public class WaterBudget extends JGTModel{
 
 
 
-			double waterStorage = computeWaterStorage(Qinput);
+			computeWaterStorage(Qinput);
 			double discharge = computeDischarge(Qinput);
-			double evapotranspiration = computeActualEvapotranspiration();
-			double runoff = computeQuickRunoff(discharge);
-			double drainage = computeR(discharge); // proposed name for method: computeFlowTowardLayers
+			computeActualEvapotranspiration();
+			computeQuickRunoff(discharge);
+			computeR(discharge); // proposed name for method: computeFlowTowardLayers
 
 			/** Save the result in  hashmaps for each station*/
-			storeResult_series(ID,waterStorage,discharge,evapotranspiration,runoff,drainage);
+			storeResult_series(ID,S_t,discharge,actualEvapotranspiration,quickFlow,R);
 
 		}
 
@@ -224,7 +224,7 @@ public class WaterBudget extends JGTModel{
 	 * @return the water storage, according to the model and the layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeWaterStorage(double Qinput) throws IOException {
+	public void computeWaterStorage(double Qinput) throws IOException {
 		/**integration time*/
 		dt=1E-4;
 
@@ -253,8 +253,6 @@ public class WaterBudget extends JGTModel{
 
 		/** Check of the Storage values: they cannot be negative*/
 		if (S_t<0) S_t=0;
-
-		return S_t;
 	}
 
 	/**
@@ -278,9 +276,8 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value of the outflow toward the lower layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeR(double Q) throws IOException {
+	public void computeR(double Q) throws IOException {
 		R = Math.min(Q, Re);
-		return R;
 	}
 
 	/**
@@ -290,9 +287,8 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value of the quick runoff from the layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeQuickRunoff(double Q) throws IOException {
+	public void computeQuickRunoff(double Q) throws IOException {
 		quickFlow = Q-R;
-		return quickFlow;
 	}
 
 	/**
@@ -302,10 +298,9 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value od the AET
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeActualEvapotranspiration() throws IOException {
+	public void computeActualEvapotranspiration() throws IOException {
 		evapotranspirationModel=SimpleETModelFactory.createModel(evapotranspirationModelName,evapotranspiration,waterStorageInitalConditions,waterStorageMaxValue);
 		actualEvapotranspiration = evapotranspirationModel.ETValues();
-		return actualEvapotranspiration;
 	}	
 
 	/**
