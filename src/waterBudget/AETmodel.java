@@ -2,10 +2,10 @@ package waterBudget;
 
 public class AETmodel implements EvapotranspirationModel{
 	
-	public static double s_max;
-	public static double ET;
-	public static double S_i;
-	public static double AET;
+	public double s_max;
+	public double ET;
+	public double S_i;
+	public double AET;
 
 	
 	public AETmodel(double ET,double S_i, double s_max){
