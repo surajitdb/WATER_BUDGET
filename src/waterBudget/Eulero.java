@@ -20,14 +20,17 @@ package waterBudget;
 
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 import org.apache.commons.math3.ode.FirstOrderIntegrator;
-import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator;
+// import org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator;
 import org.apache.commons.math3.ode.nonstiff.EulerIntegrator;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Eulero is the concrete implementation of the SolverOde
- * interface. It implements the Eulero solver. The inputs are
- * the integration time dt, the ODE to be solved and the boundary conditions
+ * The Class Eulero is the concrete implementation of the SolverOde interface.
+ * It implements the Eulero solver. The inputs are the integration time dt, the
+ * ODE to be solved and the boundary conditions
+ *
+ * @todo is the package
+ *       org.apache.commons.math3.ode.nonstiff.DormandPrince853Integrator
+ *       necessary or it might be deleted?
  * @author Marialaura Bancheri
  */
 public class Eulero implements SolverODE{
