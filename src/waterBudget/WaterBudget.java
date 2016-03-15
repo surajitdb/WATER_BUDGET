@@ -279,7 +279,8 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeR(double Q) throws IOException {
-		return Math.min(Q, Re);
+		R = Math.min(Q, Re);
+		return R;
 	}
 
 	/**
@@ -290,7 +291,8 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeQuickRunoff(double Q) throws IOException {
-		return Q-R;
+		quickFlow = Q-R;
+		return quickFlow;
 	}
 
 	/**
@@ -302,7 +304,8 @@ public class WaterBudget extends JGTModel{
 	 */
 	public double computeActualEvapotranspiration() throws IOException {
 		evapotranspirationModel=SimpleETModelFactory.createModel(evapotranspirationModelName,evapotranspiration,waterStorageInitalConditions,waterStorageMaxValue);
-		return evapotranspirationModel.ETValues();
+		actualEvapotranspiration = evapotranspirationModel.ETValues();
+		return actualEvapotranspiration;
 	}	
 
 	/**
