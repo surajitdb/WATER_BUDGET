@@ -266,8 +266,7 @@ public class WaterBudget extends JGTModel{
 	 */
 	public double computeDischarge( double Qinput) throws IOException {
 		dischargeModel=SimpleDischargeModelFactory.createModel(dischargeModelName, Qinput, basinArea, a, waterStorageInitalConditions, b);
-		double Q=dischargeModel.dischargeValues();
-		return Q;
+		return dischargeModel.dischargeValues();
 	}
 
 	/**
@@ -278,8 +277,7 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeR(double Q) throws IOException {
-		R=Math.min(Q, Re);
-		return R;
+		return Math.min(Q, Re);
 	}
 
 	/**
@@ -290,8 +288,7 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeQuickRunoff(double Q) throws IOException {
-		quickFlow=Q-R;
-		return quickFlow;
+		return Q-R;
 	}
 
 	/**
@@ -303,8 +300,7 @@ public class WaterBudget extends JGTModel{
 	 */
 	public double computeActualEvapotranspiration() throws IOException {
 		evapotranspirationModel=SimpleETModelFactory.createModel(evapotranspirationModelName,evapotranspiration,waterStorageInitalConditions,waterStorageMaxValue);
-		actualEvapotranspiration=evapotranspirationModel.ETValues();
-		return actualEvapotranspiration;
+		return evapotranspirationModel.ETValues();
 	}	
 
 	/**
