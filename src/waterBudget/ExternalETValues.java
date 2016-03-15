@@ -1,6 +1,6 @@
 package waterBudget;
 
-public class ExternalETValues implements ETModel{
+public class ExternalETValues implements EvapotranspirationModel{
 	
 	double ETinput;
 	double ET;

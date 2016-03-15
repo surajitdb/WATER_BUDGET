@@ -1,6 +1,6 @@
 package waterBudget;
 
-public class AETmodel implements ETModel{
+public class AETmodel implements EvapotranspirationModel{
 	
 	public static double s_max;
 	public static double ET;

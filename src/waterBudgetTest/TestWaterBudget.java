@@ -74,28 +74,28 @@ public class TestWaterBudget extends HMTestCase{
 
 		while( JReader.doProcess ) {
 		
-			waterBudget.solver_model="dp853";
-			waterBudget.Q_model="NonLinearReservoir";
-			waterBudget.ET_model="AET";
-			waterBudget.A=115.4708483;
+			waterBudget.odeSolverModelName="dp853";
+			waterBudget.dischargeModelName="NonLinearReservoir";
+			waterBudget.evapotranspirationModelName="AET";
+			waterBudget.basinArea=115.4708483;
 			waterBudget.a=752.3543670;
 			waterBudget.b=1.75744;
-			waterBudget.s_max=0.005704;
+			waterBudget.waterStorageMaxValue=0.005704;
 			waterBudget.Re=0.2;
-			waterBudget.nZ=1;
+			waterBudget.poreVolumeInRootZone=1;
 			
 			JReader.nextRecord();
 			
 			HashMap<Integer, double[]> id2ValueMap = JReader.outData;
-			waterBudget.inPrecipvalues = id2ValueMap;
+			waterBudget.inPrecipValues = id2ValueMap;
 			
 			dischargeReader.nextRecord();
             id2ValueMap = dischargeReader.outData;
-            waterBudget.inDischargevalues = id2ValueMap;
+            waterBudget.inDischargeValues = id2ValueMap;
             
             ETReader.nextRecord();
             id2ValueMap = ETReader.outData;
-            waterBudget.inETvalues = id2ValueMap;
+            waterBudget.inEvapotranspValues = id2ValueMap;
 
             waterBudget.pm = pm;
             waterBudget.process();

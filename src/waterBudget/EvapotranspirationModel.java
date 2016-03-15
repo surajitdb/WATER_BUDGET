@@ -1,6 +1,6 @@
 package waterBudget;
 
-public interface ETModel {
+public interface EvapotranspirationModel {
 	
 	abstract public double ETValues ();
 
