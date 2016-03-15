@@ -150,24 +150,24 @@ public class WaterBudget extends JGTModel{
 
 	@Description("The output HashMap with the Water Storage")
 	@Out
-	public HashMap<Integer, double[]> outHMStorage= new HashMap<Integer, double[]>(); // proposed name: outWaterStorage
+	public HashMap<Integer, double[]> outHMStorage; // proposed name: outWaterStorage
 
 	@Description("The output HashMap with the discharge ")
 	@Out
-	public HashMap<Integer, double[]> outHMDischarge= new HashMap<Integer, double[]>(); // proposed name: outDischarge
+	public HashMap<Integer, double[]> outHMDischarge; // proposed name: outDischarge
 
 	@Description("The output HashMap with the AET ")
 	@Out
-	public HashMap<Integer, double[]> outHMEvapotranspiration = new HashMap<Integer, double[]>(); // proposed name: outEvapotranspiration
+	public HashMap<Integer, double[]> outHMEvapotranspiration; // proposed name: outEvapotranspiration
 
 	@Description("The output HashMap with the  quick runoff")
 	@Out
-	public HashMap<Integer, double[]> outHMQuick= new HashMap<Integer, double[]>(); // proposed name: outQuickDischarge
+	public HashMap<Integer, double[]> outHMQuick; // proposed name: outQuickDischarge
 
 	@Description("The output HashMap with the outflow "
 			+ "which drains to the lower layer")
 	@Out
-	public HashMap<Integer, double[]> outHMR= new HashMap<Integer, double[]>(); // proposed name: outFlowUpperToLowerLayer
+	public HashMap<Integer, double[]> outHMR; // proposed name: outFlowUpperToLowerLayer
 
 	/**
 	 * @description Process: reading of the data, computation of the storage and
@@ -184,6 +184,8 @@ public class WaterBudget extends JGTModel{
 
 		// reading the ID of all the stations 
 		Set<Entry<Integer, double[]>> entrySet = inPrecipValues.entrySet();
+
+		allocationOutputVariables(entrySet.size());
 
 		// iterate over the station
 		for( Entry<Integer, double[]> entry : entrySet ) {
@@ -321,6 +323,16 @@ public class WaterBudget extends JGTModel{
 		outHMEvapotranspiration.put(ID, new double[]{evapotranspiration});
 		outHMQuick.put(ID, new double[]{quickRunoff});
 		outHMR.put(ID, new double[]{drainage});
+
+	}
+
+	private void allocationOutputVariables(final int size) {
+
+		outHMStorage = new HashMap<Integer, double[]>(size);
+		outHMDischarge = new HashMap<Integer, double[]>(size);
+		outHMEvapotranspiration = new HashMap<Integer, double[]>(size);
+		outHMQuick = new HashMap<Integer, double[]>(size);
+		outHMR = new HashMap<Integer, double[]>(size);
 
 	}
 
