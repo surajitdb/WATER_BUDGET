@@ -22,7 +22,6 @@ import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.MaxCountExceededException;
 import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FirstLayer implements the FirstOrderDifferentialEquations interface
  * and solves the water budget equation considering the upper layer in a 
@@ -35,15 +34,13 @@ import org.apache.commons.math3.ode.FirstOrderDifferentialEquations;
  */
 public class waterBudgetODE implements FirstOrderDifferentialEquations{
 
-	public static double Qmod;
+	public double Qmod;
 
-	
-	public static double nZ;
+	public double nZ;
 
-	public static double J;
+	public double J;
 
-	public static double ETmod;
-
+	public double ETmod;
 
 	/**
 	 * Instantiates the first layer parameters .
