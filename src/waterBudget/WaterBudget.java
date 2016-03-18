@@ -203,8 +203,6 @@ public class WaterBudget extends JGTModel{
 			ET=0;
 			if (inETvalues != null) ET = inETvalues.get(ID)[0];
 
-
-
 			double waterStorage=computeS(Qinput);
 			double discharge=computeQ(Qinput);
 			double evapotranspiration=computeAET();	
@@ -338,7 +336,6 @@ public class WaterBudget extends JGTModel{
 		outHMEvapotranspiration.put(ID, new double[]{evapotranspiration});
 		outHMQuick.put(ID, new double[]{quickRunoff});
 		outHMR.put(ID, new double[]{drainage});
-
 
 	}
 }
