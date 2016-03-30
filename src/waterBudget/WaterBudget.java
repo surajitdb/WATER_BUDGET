@@ -54,7 +54,7 @@ import org.apache.commons.math3.ode.*;
  * @todo Check the name of the variables, defining the proper name where
  *       required
  * @author Marialaura Bancheri
- * @author sidereus3 (francesco.serafin.3@gmail.com)
+ * @author sidereus (francesco.serafin.3@gmail.com)
  * @version
  */
 public class WaterBudget extends JGTModel{
