@@ -170,6 +170,11 @@ public class WaterBudget extends JGTModel{
 	public HashMap<Integer, double[]> outHMR; // proposed name: outFlowUpperToLowerLayer
 
 	/**
+	 * @brief Default constructor
+	 */
+	public WaterBudget() {}
+
+	/**
 	 * @description Process: reading of the data, computation of the storage and
 	 *              outflows
 	 *
