@@ -174,6 +174,54 @@ public class WaterBudget extends JGTModel{
 	 */
 	public WaterBudget() {}
 
+	public void setPrecipitation(final HashMap<Integer, double[]> inPrecipValues) {
+		this.inPrecipValues = inPrecipValues;
+	}
+
+	public void setEvapotranspiration(final HashMap<Integer, double[]> inEvapotranspValues) {
+		this.inEvapotranspValues = inEvapotranspValues;
+	}
+
+	public void setDischarge(final HashMap<Integer, double[]> inDischargeValues) {
+		this.inDischargeValues = inDischargeValues;
+	}
+
+	public void setBasinArea(final double basinArea) {
+		this.basinArea = basinArea;
+	}
+
+	public void setA(final double a) {
+		this.a= a;
+	}
+
+	public void setB(final double b) {
+		this.b = b;
+	}
+
+	public void setPoreVolumeInRootZone(final double poreVolumeInRootZone) {
+		this.poreVolumeInRootZone = poreVolumeInRootZone;
+	}
+
+	public void setWaterStorageMaxValue(final double waterStorageMaxValue) {
+		this.waterStorageMaxValue = waterStorageMaxValue;
+	}
+
+	public void setRe(final double Re) {
+		this.Re= Re;
+	}
+	public void setDischargeModelName(final String dischargeModelName) {
+		this.dischargeModelName = dischargeModelName;
+	}
+
+	public void setEvapotranspirationModelName(final String evapotranspirationModelName) {
+		this.evapotranspirationModelName = evapotranspirationModelName;
+	}
+
+	public void setOdeSolverModelName(final String odeSolverModelName) {
+		this.odeSolverModelName = odeSolverModelName;
+	}
+
+
 	/**
 	 * @description Process: reading of the data, computation of the storage and
 	 *              outflows
@@ -337,6 +385,26 @@ public class WaterBudget extends JGTModel{
 		outHMQuick = new HashMap<Integer, double[]>(size);
 		outHMR = new HashMap<Integer, double[]>(size);
 
+	}
+
+	public HashMap<Integer, double[]> getStorage() {
+		return outHMStorage;
+	}
+
+	public HashMap<Integer, double[]> getDischarge() {
+		return outHMDischarge;
+	}
+
+	public HashMap<Integer, double[]> getEvapotranspiration() {
+		return outHMEvapotranspiration;
+	}
+
+	public HashMap<Integer, double[]> getQuick() {
+		return outHMQuick;
+	}
+
+	public HashMap<Integer, double[]> getR() {
+		return outHMR;
 	}
 
 }
