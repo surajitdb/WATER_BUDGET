@@ -123,28 +123,9 @@ public class WaterBudget extends JGTModel{
 	@In
 	public String ET_model;
 
-
 	@Description("ODE solver ")
 	@In
 	public String solver_model;
-
-
-	//@Description("water storage initial condition ")
-	//@In
-	//public static double S_i;
-
-
-	//@Description("Simluted value of Water storage,"
-			//+ "at a given time step")
-	///double S_t;
-
-	@Description("Outflow from the upper layer, which drains to"
-			+ "the lower layer")
-	double R; 
-
-	@Description("Simluted value of quick flow"
-			+ "at a given time step")
-	double Qquick;
 
 	@Description("Simluted value of AET"
 			+ "at a given time step")
@@ -216,9 +197,10 @@ public class WaterBudget extends JGTModel{
 
 			double waterStorage=computeS(Qinput,initialConditionS_i.get(ID)[0]);
 			double discharge=computeQ(Qinput,initialConditionS_i.get(ID)[0]);
-			double evapotranspiration=computeAET(initialConditionS_i.get(ID)[0]);	
-			double quickRunoff=computeQuick(discharge);
+			double evapotranspiration=computeAET(initialConditionS_i.get(ID)[0]);
 			double drainage=computeR(discharge);
+			double quickRunoff=computeQuick(discharge,drainage);
+			
 
 			/** Save the result in  hashmaps for each station*/
 			storeResult_series(ID,waterStorage,discharge,evapotranspiration,quickRunoff,drainage);
@@ -301,7 +283,7 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeR(double Q) throws IOException {
-		R=Math.min(Q, Re);
+		double R=Math.min(Q, Re);
 		return R;
 	}
 
@@ -312,8 +294,8 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value of the quick runoff from the layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeQuick(double Q) throws IOException {
-		Qquick=Q-R;
+	public double computeQuick(double Q, double R) throws IOException {
+		double Qquick=Q-R;
 		return Qquick;
 	}
 
