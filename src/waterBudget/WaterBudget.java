@@ -129,14 +129,14 @@ public class WaterBudget extends JGTModel{
 	public String solver_model;
 
 
-	@Description("water storage initial condition ")
-	@In
-	public static double S_i;
+	//@Description("water storage initial condition ")
+	//@In
+	//public static double S_i;
 
 
-	@Description("Simluted value of Water storage,"
-			+ "at a given time step")
-	double S_t;
+	//@Description("Simluted value of Water storage,"
+			//+ "at a given time step")
+	///double S_t;
 
 	@Description("Outflow from the upper layer, which drains to"
 			+ "the lower layer")
@@ -174,6 +174,8 @@ public class WaterBudget extends JGTModel{
 	@Out
 	public HashMap<Integer, double[]> outHMR= new HashMap<Integer, double[]>() ;
 
+	HashMap<Integer, double[]>initialConditionS_i= new HashMap<Integer, double[]>();
+	int step;
 
 	/**
 	 * Process: reading of the data, computation of the
@@ -185,8 +187,17 @@ public class WaterBudget extends JGTModel{
 	public void process() throws Exception {
 		checkNull(inPrecipvalues);
 
+
+
 		// reading the ID of all the stations 
 		Set<Entry<Integer, double[]>> entrySet = inPrecipvalues.entrySet();
+
+		if(step==0){
+			for (Entry<Integer, double[]> entry : entrySet){
+				Integer ID = entry.getKey();
+				initialConditionS_i.put(ID,new double[]{0.0});
+			}
+		}
 
 		// iterate over the station
 		for( Entry<Integer, double[]> entry : entrySet ) {
@@ -203,19 +214,21 @@ public class WaterBudget extends JGTModel{
 			ET=0;
 			if (inETvalues != null) ET = inETvalues.get(ID)[0];
 
-			double waterStorage=computeS(Qinput);
-			double discharge=computeQ(Qinput);
-			double evapotranspiration=computeAET();	
+			double waterStorage=computeS(Qinput,initialConditionS_i.get(ID)[0]);
+			double discharge=computeQ(Qinput,initialConditionS_i.get(ID)[0]);
+			double evapotranspiration=computeAET(initialConditionS_i.get(ID)[0]);	
 			double quickRunoff=computeQuick(discharge);
 			double drainage=computeR(discharge);
 
 			/** Save the result in  hashmaps for each station*/
 			storeResult_series(ID,waterStorage,discharge,evapotranspiration,quickRunoff,drainage);
+			
+			initialConditionS_i.put(ID,new double[]{waterStorage/nZ});
 
 		}
 
 
-
+		step++;
 
 	}
 
@@ -228,7 +241,7 @@ public class WaterBudget extends JGTModel{
 	 * @return the water storage, according to the model and the layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeS(double Qinput) throws IOException {
+	public double computeS(double Qinput, double S_i) throws IOException {
 		/**integration time*/
 		dt=1E-4;
 
@@ -253,7 +266,7 @@ public class WaterBudget extends JGTModel{
 		/** result of the resolution of the ODE, if nZ=1, S_i=S_t
 		 * and setting of the new initial condition (S_i)*/
 		S_i=solver.integrateValues();
-		S_t=S_i*nZ;
+		double S_t=S_i*nZ;
 
 		/** Check of the Storage values: they cannot be negative*/
 		if (S_t<0) S_t=0;
@@ -273,7 +286,7 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value of the simulated discharge
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeQ( double Qinput) throws IOException {
+	public double computeQ( double Qinput, double S_i) throws IOException {
 		model=SimpleDischargeModelFactory.createModel(Q_model, Qinput, A, a, S_i, b);
 		double Q=model.dischargeValues();
 		return Q;
@@ -311,7 +324,7 @@ public class WaterBudget extends JGTModel{
 	 * @return the double value od the AET
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeAET() throws IOException {
+	public double computeAET(double S_i) throws IOException {
 		ETmodel=SimpleETModelFactory.createModel(ET_model,ET,S_i,s_max);
 		AET=ETmodel.ETValues();
 		return AET;
