@@ -1,7 +1,5 @@
 package org.jgrasstools.hortonmachine.utils;
 
-import static java.lang.Double.NaN;
-
 public class HMTestMapstrentoP {
     /**
      * Result for the TrentoPTest, this is for the project mode, section
