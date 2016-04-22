@@ -40,7 +40,7 @@ public class waterBudgetODE implements FirstOrderDifferentialEquations{
 	
 	public static double nZ;
 
-	public static double J;
+	public static double totalInputFluxes;
 
 	public static double ETmod;
 
@@ -56,10 +56,10 @@ public class waterBudgetODE implements FirstOrderDifferentialEquations{
 	 * @param S: the soil moisture value at the previous time step
 	 * @param s_max: the maximum value of the soil moisture 
 	 */
-	public waterBudgetODE(double nZ, double J, double Qmod, double ETmod) {
+	public waterBudgetODE(double nZ, double totalInputFluxes, double Qmod, double ETmod) {
 		this.Qmod=Qmod;
 		this.nZ=nZ;
-		this.J=J;
+		this.totalInputFluxes=totalInputFluxes;
 		this.ETmod=ETmod;
 
 	}
@@ -76,7 +76,7 @@ public class waterBudgetODE implements FirstOrderDifferentialEquations{
 	 */
 	public void computeDerivatives(double t, double[] y, double[] yDot)
 			throws MaxCountExceededException, DimensionMismatchException {
-		yDot[0] =1/nZ*(J-Qmod-ETmod);
+		yDot[0] =1/nZ*(totalInputFluxes-Qmod-ETmod);
 		
 
 	

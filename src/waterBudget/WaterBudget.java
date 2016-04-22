@@ -53,12 +53,14 @@ import org.apache.commons.math3.ode.*;
 public class WaterBudget extends JGTModel{
 
 
-	@Description("precipitation: precipitation value for the given time considered") 
-	double precipitation;
-
-	@Description("Input Precipitation Hashmap")
+	@Description("Input rain Hashmap")
 	@In
-	public HashMap<Integer, double[]> inPrecipvalues;
+	public HashMap<Integer, double[]> inRainValues;
+	
+	
+	@Description("Input rain Hashmap")
+	@In
+	public HashMap<Integer, double[]> inSnowValues;
 
 	@Description("ET: ET value for the given time considered")
 	double ET;
@@ -67,9 +69,7 @@ public class WaterBudget extends JGTModel{
 	@In
 	public HashMap<Integer, double[]> inETvalues;
 
-	@Description("Input Discharge Hashmap: this is the measured "
-			+ "discharge time series, in the case of resultion of the "
-			+ "water budget with given the external values")
+	@Description("Input Discharge Hashmap: contribution from other HRUs")
 	@In
 	public HashMap<Integer, double[]> inDischargevalues;
 
@@ -115,7 +115,7 @@ public class WaterBudget extends JGTModel{
 	public static double Re;
 
 
-	@Description("Discharge model: NonLinearReservoir, ExternalValues")
+	@Description("Discharge model: NonLinearReservoir, Clapp-H")
 	@In
 	public String Q_model;
 
@@ -166,12 +166,12 @@ public class WaterBudget extends JGTModel{
 	 */
 	@Execute
 	public void process() throws Exception {
-		checkNull(inPrecipvalues);
+		checkNull(inRainValues);
 
 
 
 		// reading the ID of all the stations 
-		Set<Entry<Integer, double[]>> entrySet = inPrecipvalues.entrySet();
+		Set<Entry<Integer, double[]>> entrySet = inRainValues.entrySet();
 
 		if(step==0){
 			for (Entry<Integer, double[]> entry : entrySet){
@@ -185,17 +185,25 @@ public class WaterBudget extends JGTModel{
 			Integer ID = entry.getKey();
 
 			/**Input data reading*/
-			precipitation = inPrecipvalues.get(ID)[0];
-			if (isNovalue(precipitation)) precipitation= 0;
+			double rain = inRainValues.get(ID)[0];
+			if (isNovalue(rain)) rain= 0;
+			
+			double snow = 0;					
+			if (inSnowValues != null) snow=inSnowValues.get(ID)[0];
+			if (isNovalue(snow)) snow= 0;
 
 			double Qinput=0;
 			if (inDischargevalues != null) Qinput =inDischargevalues.get(ID)[0];
-
+			if (isNovalue(Qinput)) Qinput= 0;
+			
+			
+			double totalInputFluxes=rain+snow+Qinput;
 
 			ET=0;
 			if (inETvalues != null) ET = inETvalues.get(ID)[0];
+			if (isNovalue(ET)) ET= 0;
 
-			double waterStorage=computeS(Qinput,initialConditionS_i.get(ID)[0]);
+			double waterStorage=computeS(totalInputFluxes,initialConditionS_i.get(ID)[0]);
 			double discharge=computeQ(Qinput,waterStorage);
 			double evapotranspiration=computeAET(initialConditionS_i.get(ID)[0]);
 			double drainage=computeR(discharge);
@@ -217,18 +225,18 @@ public class WaterBudget extends JGTModel{
 	/**
 	 * Compute the water storage
 	 *
-	 * @param J: input precipitation 
+	 * @param J: input rain 
 	 * @param Qinput : input discharge
 	 * @param ET: input potential ET
 	 * @return the water storage, according to the model and the layer
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public double computeS(double Qinput, double S_i) throws IOException {
+	public double computeS(double totalInputFluxes, double S_i) throws IOException {
 		/**integration time*/
 		dt=1E-4;
 
 		/** SimpleFactory for the computation of Q, according to the model*/
-		model=SimpleDischargeModelFactory.createModel(Q_model, Qinput, A, a, S_i, b);
+		model=SimpleDischargeModelFactory.createModel(Q_model, A, a, S_i, b);
 		double Qmod=model.dischargeValues();
 
 		/** SimpleFactory for the computation of ET, according to the model*/
@@ -236,7 +244,7 @@ public class WaterBudget extends JGTModel{
 		double ETmod=ETmodel.ETValues();
 
 		/** Creation of the differential equation*/
-		FirstOrderDifferentialEquations ode=new waterBudgetODE(nZ,precipitation, Qmod, ETmod);			
+		FirstOrderDifferentialEquations ode=new waterBudgetODE(nZ,totalInputFluxes,Qmod, ETmod);			
 
 		/** Boundaries conditions*/
 		double[] y = new double[] { S_i, 0 };
@@ -269,7 +277,7 @@ public class WaterBudget extends JGTModel{
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public double computeQ( double Qinput, double S_i) throws IOException {
-		model=SimpleDischargeModelFactory.createModel(Q_model, Qinput, A, a, S_i, b);
+		model=SimpleDischargeModelFactory.createModel(Q_model, A, a, S_i, b);
 		double Q=model.dischargeValues();
 		return Q;
 	}

@@ -87,7 +87,7 @@ public class TestWaterBudget extends HMTestCase{
 			JReader.nextRecord();
 			
 			HashMap<Integer, double[]> id2ValueMap = JReader.outData;
-			waterBudget.inPrecipvalues = id2ValueMap;
+			waterBudget.inRainValues = id2ValueMap;
 			
 			/*
 			dischargeReader.nextRecord();
