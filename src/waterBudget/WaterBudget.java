@@ -34,6 +34,9 @@ import org.geotools.feature.SchemaException;
 import org.jgrasstools.gears.libs.modules.JGTModel;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.commons.math3.ode.*;
 
@@ -169,56 +172,168 @@ public class WaterBudget extends JGTModel{
 	@Out
 	public HashMap<Integer, double[]> outHMR; // proposed name: outFlowUpperToLowerLayer
 
+	// instances variable useful for reflection
+	Class <?> inputClass;
+	Object inputObject;
+
 	/**
 	 * @brief Default constructor
 	 */
 	public WaterBudget() {}
 
-	public void setPrecipitation(final HashMap<Integer, double[]> inPrecipValues) {
-		this.inPrecipValues = inPrecipValues;
+	public WaterBudget(final Object inputObject) throws NoSuchMethodException,
+		   NoSuchFieldException, IllegalArgumentException,
+		   IllegalAccessException, InvocationTargetException,
+		   InstantiationException {
+
+		this.inputObject = inputObject;
+		this.inputClass = (Class<?>) inputObject.getClass();
+
+		setInputParameters();
+
 	}
 
-	public void setEvapotranspiration(final HashMap<Integer, double[]> inEvapotranspValues) {
-		this.inEvapotranspValues = inEvapotranspValues;
-	}
+	public WaterBudget(final Object inputObject, final HashMap<Integer,
+			double[]> inDischargeValues) throws NoSuchMethodException,
+		   NoSuchFieldException, IllegalArgumentException,
+		   IllegalAccessException, InvocationTargetException,
+		   InstantiationException {
 
-	public void setDischarge(final HashMap<Integer, double[]> inDischargeValues) {
+		this(inputObject);
 		this.inDischargeValues = inDischargeValues;
+
 	}
 
-	public void setBasinArea(final double basinArea) {
-		this.basinArea = basinArea;
+	private void setInputParameters() throws NoSuchMethodException,
+			NoSuchFieldException, IllegalArgumentException,
+			IllegalAccessException, InvocationTargetException,
+			InstantiationException {
+
+		setPrecipitation();
+		setEvapotranspiration();
+		setBasinArea();
+		setPoreVolumeInRootZone();
+		setWaterStorageMaxValue();
+		setRe();
+
+		setA(752.35);
+		setB(1.76);
+
+		setDischargeModelName();
+		setEvapotranspirationModelName();
+		setOdeSolverModelName();
+
 	}
 
-	public void setA(final double a) {
+	private Object getDataFromReflectedMethod(final String methodName) throws
+		NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+		InvocationTargetException
+	{
+
+		try{
+			Method currentMethod = inputClass.getDeclaredMethod(methodName);
+			return currentMethod.invoke(inputObject);
+		} catch (NoSuchMethodException e) {
+			throw new NoSuchMethodException(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new IllegalArgumentException(e.getMessage());
+		} catch (IllegalAccessException e) {
+			throw new IllegalAccessException(e.getMessage());
+		} catch (InvocationTargetException e) {
+			throw new InvocationTargetException(e.getCause());
+		}
+
+	}
+
+	private Object getDataFromReflectedField(final String fieldName) throws
+		NoSuchFieldException, IllegalAccessException
+	{
+
+		try {
+			Field field = inputClass.getDeclaredField(fieldName); // NoSuchFieldException
+			field.setAccessible(true);
+			return field.get(inputObject); // IllegalAccessException
+		} catch (NoSuchFieldException e) {
+			throw new NoSuchFieldException(e.getMessage());
+		} catch (IllegalAccessException e) {
+			throw new IllegalAccessException(e.getMessage());
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setPrecipitation() throws NoSuchMethodException,
+			IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException
+	{
+		inPrecipValues = (HashMap<Integer, double[]>)
+			getDataFromReflectedMethod("getPrecipitation");
+	}
+
+	@SuppressWarnings("unchecked")
+	private void setEvapotranspiration() throws NoSuchMethodException,
+			IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException
+	{
+		inEvapotranspValues = (HashMap<Integer, double[]>)
+			getDataFromReflectedMethod("getEvapotranspiration");
+	}
+
+	private void setBasinArea() throws NoSuchMethodException,
+		   IllegalArgumentException, IllegalAccessException,
+		   InvocationTargetException
+	{
+
+		basinArea = (Double) getDataFromReflectedMethod("getBasinArea");
+
+	}
+
+	private void setPoreVolumeInRootZone() throws NoSuchMethodException,
+		   IllegalArgumentException, IllegalAccessException,
+		   InvocationTargetException
+	{
+		poreVolumeInRootZone = (Double)
+			getDataFromReflectedMethod("getPoreVolumeInRootZone");
+	}
+
+    private void setWaterStorageMaxValue() throws NoSuchMethodException,
+            IllegalArgumentException, IllegalAccessException,
+            InvocationTargetException
+    {
+		waterStorageMaxValue = (Double) getDataFromReflectedMethod("getWaterStorageMaxValue");
+	}
+
+	private void setRe() throws NoSuchMethodException, IllegalArgumentException,
+		   IllegalAccessException, InvocationTargetException
+	{
+		Re = (Double) getDataFromReflectedMethod("getRe");
+	}
+
+	private void setA(final double a) {
 		this.a= a;
 	}
 
-	public void setB(final double b) {
+	private void setB(final double b) {
 		this.b = b;
 	}
 
-	public void setPoreVolumeInRootZone(final double poreVolumeInRootZone) {
-		this.poreVolumeInRootZone = poreVolumeInRootZone;
+	private void setDischargeModelName() throws NoSuchFieldException,
+			IllegalAccessException
+	{
+		dischargeModelName = (String)
+			getDataFromReflectedField("dischargeModelName");
 	}
 
-	public void setWaterStorageMaxValue(final double waterStorageMaxValue) {
-		this.waterStorageMaxValue = waterStorageMaxValue;
+	private void setEvapotranspirationModelName() throws NoSuchFieldException,
+			IllegalAccessException
+	{
+		evapotranspirationModelName = (String) getDataFromReflectedField("evapotranspirationModelName");
 	}
 
-	public void setRe(final double Re) {
-		this.Re= Re;
-	}
-	public void setDischargeModelName(final String dischargeModelName) {
-		this.dischargeModelName = dischargeModelName;
-	}
-
-	public void setEvapotranspirationModelName(final String evapotranspirationModelName) {
-		this.evapotranspirationModelName = evapotranspirationModelName;
-	}
-
-	public void setOdeSolverModelName(final String odeSolverModelName) {
-		this.odeSolverModelName = odeSolverModelName;
+	private void setOdeSolverModelName() throws NoSuchFieldException,
+			IllegalAccessException
+	{
+		odeSolverModelName = (String) getDataFromReflectedField("odeSolverModelName");
 	}
 
 
@@ -286,8 +401,8 @@ public class WaterBudget extends JGTModel{
 		double Qmod=dischargeModel.dischargeValues();
 
 		/** SimpleFactory for the computation of ET, according to the model*/
-		evapotranspirationModel=SimpleETModelFactory.createModel(evapotranspirationModelName,evapotranspiration,waterStorageInitalConditions,waterStorageMaxValue);
-		double ETmod=evapotranspirationModel.ETValues();
+        evapotranspirationModel=SimpleETModelFactory.createModel(evapotranspirationModelName,evapotranspiration,waterStorageInitalConditions,waterStorageMaxValue);
+        double ETmod=evapotranspirationModel.ETValues();
 
 		/** Creation of the differential equation*/
 		FirstOrderDifferentialEquations ode=new waterBudgetODE(poreVolumeInRootZone,precipitation, Qmod, ETmod);
