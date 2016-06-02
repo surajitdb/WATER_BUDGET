@@ -51,7 +51,7 @@ import java.io.IOException;
 /**
  * The Class SumSeries compute the sum of two time series
  */
-public class SumSeriesConnections extends JGTModel{
+public class SumSeriesWithConnections extends JGTModel{
 
 	@Description("Connetction between HRUS")
 	@In
