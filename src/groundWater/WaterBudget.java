@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package waterBudget;
+package groundWater;
 
 import static org.jgrasstools.gears.libs.modules.JGTConstants.isNovalue;
 
@@ -113,6 +113,10 @@ public class WaterBudget extends JGTModel{
 	@In
 	public static double nZ;
 
+    @Description("partitioning coefficient between the reserovir")
+    @Unit("-")
+    @In
+    public double alpha;
 
 	@Description("Maximum value of the water storage, needed for the"
 			+ "computation of the Actual EvapoTraspiration")
@@ -176,8 +180,7 @@ public class WaterBudget extends JGTModel{
 
 	HashMap<Integer, double[]>initialConditionS_i= new HashMap<Integer, double[]>();
 	int step;
-
-    
+	
     
 
 	/**
@@ -190,8 +193,7 @@ public class WaterBudget extends JGTModel{
 	public void process() throws Exception {
 		checkNull(inRainValues);
 		
-  
-
+       
 		// reading the ID of all the stations 
 		Set<Entry<Integer, double[]>> entrySet = inRainValues.entrySet();
 
@@ -223,7 +225,7 @@ public class WaterBudget extends JGTModel{
 			if (isNovalue(Qinput2)) Qinput2= 0;
 			
 			
-			double totalInputFluxes=rain+snow+Qinput1+Qinput2;
+			double totalInputFluxes=(1-alpha)*(rain+snow+Qinput1+Qinput2);
 
 			ET=0;
 			if (inETvalues != null) ET = inETvalues.get(ID)[0];
@@ -346,8 +348,6 @@ public class WaterBudget extends JGTModel{
 		return AET;
 	}
 	
-
-
 
 	/**
 	 * Store of the results in hashmaps 

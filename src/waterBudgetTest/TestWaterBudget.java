@@ -34,7 +34,7 @@ public class TestWaterBudget extends HMTestCase{
 		
 		OmsTimeSeriesIteratorReader JReader = getTimeseriesReader(inPathToPrec, fId, startDate, endDate, timeStepMinutes);
 		//OmsTimeSeriesIteratorReader dischargeReader = getTimeseriesReader(inPathToDischarge, fId, startDate, endDate, timeStepMinutes);
-		//OmsTimeSeriesIteratorReader ETReader = getTimeseriesReader(inPathToET, fId, startDate, endDate, timeStepMinutes);
+		OmsTimeSeriesIteratorReader ETReader = getTimeseriesReader(inPathToET, fId, startDate, endDate, timeStepMinutes);
 		OmsTimeSeriesIteratorWriter writerS = new OmsTimeSeriesIteratorWriter();
 		OmsTimeSeriesIteratorWriter writerQ = new OmsTimeSeriesIteratorWriter();
 		OmsTimeSeriesIteratorWriter writerET = new OmsTimeSeriesIteratorWriter();
@@ -89,14 +89,11 @@ public class TestWaterBudget extends HMTestCase{
 			HashMap<Integer, double[]> id2ValueMap = JReader.outData;
 			waterBudget.inRainValues = id2ValueMap;
 			
-			/*
-			dischargeReader.nextRecord();
-            id2ValueMap = dischargeReader.outData;
-            waterBudget.inDischargevalues = id2ValueMap;
+
             
             ETReader.nextRecord();
             id2ValueMap = ETReader.outData;
-            waterBudget.inETvalues = id2ValueMap;*/
+            waterBudget.inETvalues = id2ValueMap;
 
             waterBudget.pm = pm;
             waterBudget.process();
