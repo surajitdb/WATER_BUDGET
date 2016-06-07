@@ -204,7 +204,7 @@ public class WaterBudget extends JGTModel{
 		/** The ouput of the prevous computation in the average discharge in 1 minute in m^3/s 
 		 * so we need the compute the hpurly average and put it back in mm/h since we want the
 		 * storage in mm/h*/
-		double Q=computeMean(runoff,step, inTimestep)/area*conversion;
+		double Q=computeMean(runoff,step, inTimestep);
 
 		/** computation of the storage*/
 		double waterStorage=computeS(alpha*totalInputFluxes,Q);

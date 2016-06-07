@@ -9,7 +9,7 @@ import org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter;
 import org.jgrasstools.gears.libs.monitor.PrintStreamProgressMonitor;
 import org.jgrasstools.hortonmachine.utils.HMTestCase;
 
-import sumSeries.SumSeriesConnections;
+import sumSeries.SumSeriesWithConnections;
 import waterBudget.WaterBudget;
 
 public class TestSum extends HMTestCase{
@@ -37,7 +37,7 @@ public class TestSum extends HMTestCase{
 		writerSum.tTimestep = timeStepMinutes;
 		writerSum.fileNovalue="-9999";
 		
-		SumSeriesConnections sum= new SumSeriesConnections();
+		SumSeriesWithConnections sum= new SumSeriesWithConnections();
 		int []connections={209,201};
 
 		sum.connections=connections;
