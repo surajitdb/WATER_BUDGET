@@ -9,9 +9,9 @@ import org.jgrasstools.gears.io.timedependent.OmsTimeSeriesIteratorWriter;
 import org.jgrasstools.gears.libs.monitor.PrintStreamProgressMonitor;
 import org.jgrasstools.hortonmachine.utils.HMTestCase;
 
-import waterBudget.WaterBudget;
+import rootZone.WaterBudget;
 
-public class TestWaterBudget extends HMTestCase{
+public class TestRootZone extends HMTestCase{
 
 	public void testLinear() throws Exception {
 
@@ -23,22 +23,18 @@ public class TestWaterBudget extends HMTestCase{
 		PrintStreamProgressMonitor pm = new PrintStreamProgressMonitor(System.out, System.out);
 
 		String inPathToPrec = "resources/Input/rainfall.csv";
-		String inPathToDischarge = "resources/Input/Q.csv";
 		String inPathToET ="resources/Input/ET.csv";
-		String pathToS= "resources/Output/waterBudget/S.csv";
-		String pathToQ= "resources/Output/waterBudget/Q.csv";
-		String pathToET= "resources/Output/waterBudget/ET.csv";
-		String pathToQuick= "resources/Output/waterBudget/Quick.csv";
-		String pathToR= "resources/Output/waterBudget/R_drain.csv";
+		String pathToS= "resources/Output/rootZone/S.csv";
+		String pathToQ= "resources/Output/rootZone/Q.csv";
+		String pathToET= "resources/Output/rootZone/ET.csv";
+		String pathToR= "resources/Output/rootZone/R_drain.csv";
 
 		
 		OmsTimeSeriesIteratorReader JReader = getTimeseriesReader(inPathToPrec, fId, startDate, endDate, timeStepMinutes);
-		//OmsTimeSeriesIteratorReader dischargeReader = getTimeseriesReader(inPathToDischarge, fId, startDate, endDate, timeStepMinutes);
 		OmsTimeSeriesIteratorReader ETReader = getTimeseriesReader(inPathToET, fId, startDate, endDate, timeStepMinutes);
 		OmsTimeSeriesIteratorWriter writerS = new OmsTimeSeriesIteratorWriter();
 		OmsTimeSeriesIteratorWriter writerQ = new OmsTimeSeriesIteratorWriter();
 		OmsTimeSeriesIteratorWriter writerET = new OmsTimeSeriesIteratorWriter();
-		OmsTimeSeriesIteratorWriter writerQuick = new OmsTimeSeriesIteratorWriter();
 		OmsTimeSeriesIteratorWriter writerR = new OmsTimeSeriesIteratorWriter();
 
 
@@ -57,11 +53,6 @@ public class TestWaterBudget extends HMTestCase{
 		writerET.tTimestep = timeStepMinutes;
 		writerET.fileNovalue="-9999";
 		
-		writerQuick.file = pathToQuick;
-		writerQuick.tStart = startDate;
-		writerQuick.tTimestep = timeStepMinutes;
-		writerQuick.fileNovalue="-9999";
-		
 		writerR.file = pathToR;
 		writerR.tStart = startDate;
 		writerR.tTimestep = timeStepMinutes;
@@ -77,12 +68,13 @@ public class TestWaterBudget extends HMTestCase{
 			waterBudget.solver_model="dp853";
 			waterBudget.Q_model="NonLinearReservoir";
 			waterBudget.ET_model="AET";
-			waterBudget.A=115.4708483;
 			waterBudget.a=752.3543670;
-			waterBudget.b=1.75744;
+			waterBudget.c=1.75744;
 			waterBudget.s_max=0.005704;
 			waterBudget.Re=0.2;
 			waterBudget.nZ=1;
+			waterBudget.ID=209;
+			waterBudget.pB=4.5;
 			
 			JReader.nextRecord();
 			
@@ -101,8 +93,6 @@ public class TestWaterBudget extends HMTestCase{
             HashMap<Integer, double[]> outHMStorage = waterBudget.outHMStorage;
             HashMap<Integer, double[]> outHMDischarge = waterBudget.outHMDischarge;
             HashMap<Integer, double[]> outHMET = waterBudget.outHMEvapotranspiration;
-            HashMap<Integer, double[]> outHMQuick = waterBudget.outHMQuick;
-            
             HashMap<Integer, double[]> outHMR = waterBudget.outHMR;
             
 			writerS.inData = outHMStorage ;
@@ -125,13 +115,7 @@ public class TestWaterBudget extends HMTestCase{
 			if (pathToET != null) {
 				writerET.close();
 			}
-			
-			writerQuick.inData = outHMQuick;
-			writerQuick.writeNextLine();
-			
-			if (pathToQuick != null) {
-				writerQuick.close();
-			}
+
 			
 			writerR.inData = outHMR;
 			writerR.writeNextLine();
@@ -142,8 +126,8 @@ public class TestWaterBudget extends HMTestCase{
             
 		}
 		JReader.close();
-        //dischargeReader.close();
-        //ETReader.close();
+
+        ETReader.close();
 
 	}
 

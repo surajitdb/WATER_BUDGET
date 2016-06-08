@@ -22,7 +22,7 @@ public class TestRunoff extends HMTestCase{
 		String fId = "ID";
 
 		String inPathToPrec = "resources/Input/rainfall.csv";
-		String pathToQ= "resources/Output/Q_runoff.csv";
+		String pathToQ= "resources/Output/runoff/Q_runoff.csv";
 
 
 		

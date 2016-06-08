@@ -1,0 +1,14 @@
+@T,table
+Created,2016-06-07 21:49
+Author,HortonMachine library
+@H,timestamp,value_209
+ID,,209
+Type,Date,Double
+Format,yyyy-MM-dd HH:mm,
+,1994-01-01 00:00,0.0
+,1994-01-01 01:00,0.0
+,1994-01-01 02:00,0.0
+,1994-01-01 03:00,0.0
+,1994-01-01 04:00,0.0
+,1994-01-01 05:00,0.0
+

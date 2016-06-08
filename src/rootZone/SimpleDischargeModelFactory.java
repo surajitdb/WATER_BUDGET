@@ -2,7 +2,7 @@ package rootZone;
 
 public class SimpleDischargeModelFactory {
 
-	public static DischargeModel createModel(String type,double A, 
+	public static DischargeModel createModel(String type, 
 			double a, double S_i, double b){
 		DischargeModel model=null;
 		if (type.equals("NonLinearReservoir")){
